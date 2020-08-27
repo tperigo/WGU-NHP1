@@ -1,5 +1,5 @@
 import csv
-from NHP1.Package import Package
+from Package import Package
 
 
 # Node class for items
