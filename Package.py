@@ -1,7 +1,7 @@
 # Class defining a Package object
 class Package:
     def __init__(self, package_id, address, city, state, zip_code, deadline,
-                 weight, notes):
+                 weight, notes, status='Hub'):
         self.package_id = package_id
         self.address = address
         self.city = city
@@ -10,6 +10,7 @@ class Package:
         self.deadline = deadline
         self.weight = weight
         self.notes = notes
+        self.status = status
 
     def get_package_id(self):
         return self.package_id
@@ -37,6 +38,9 @@ class Package:
             self.notes = 'N/A'
         return self.notes
 
+    def get_status(self):
+        return self.status
+
     def set_package_id(self, package_id):
         self.package_id = package_id
 
@@ -61,7 +65,11 @@ class Package:
     def set_notes(self, notes):
         self.notes = notes
 
+    def set_status(self, status):
+        self.status = status
+
     def print_package(self):
-        print('{} {}, {}, {}, {} - {} - {} - {}'.format(self.get_package_id(), self.get_address(), self.get_city(),
+        # TODO - If NoneType
+            print('{} {}, {}, {}, {} - {} - {} - {} - {}'.format(self.get_package_id(), self.get_address(), self.get_city(),
                                                         self.get_state(), self.get_zip_code(), self.get_deadline(),
-                                                        self.get_weight(), self.get_notes()))
+                                                        self.get_weight(), self.get_notes(), self.get_status()))

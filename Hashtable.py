@@ -1,15 +1,10 @@
 # Hashtable class implementation
-from Node import Node
-
-
-def print_hashtable(h):
-    for i in range(h.get_size()):
-        h.print_bucket(i)
-
-
+# Custom made for WGUPS
+# All keys are known before hand. No collision.
+# TODO - Eventually upgrade and set up buckets for collision
 class Hashtable:
     # Initializes hashtable - creating a table 'h' of initial_size with each index set to None
-    def __init__(self, initial_size=50):
+    def __init__(self, initial_size=40):
         self.size = initial_size
         self.h = [None] * initial_size
 
@@ -19,71 +14,30 @@ class Hashtable:
         return key % len(self.h)
 
     # Set Function
-    # Adds a Node(key/value pair) to the hashtable. If the hash-index is None, creates a new list at that index.
-    # If the hash index location is occupied, uses chaining to resolve collision.
-    # If if the key is already in the bucket, modifies the value. No duplicate keys allowed.
+    # Adds a value to the hashtable.
     def set(self, key, value):
-        # Hash index
         i = self._hash(key)
-
-        # Create new node holding the key value pair.
-        n = Node(key, value)
-
-        if self.h[i] is None:
-            self.h[i] = [n]
-        else:
-            # Bucket
-            b = self.h[i]
-
-            # Search for key. If found, modify the value
-            found = False
-            for item in b:
-                if item.get_key() == key:
-                    item.data = value
-                    found = True
-                    break
-            if not found:
-                # Chaining
-                b.append(n)
+        self.h[i] = value
 
     # Get / Search Function.
     # Search for key. Return key if found, else return None
     def get(self, key):
         i = self._hash(key)
-        b = self.h[i]
-
-        for item in b:
-            if item.get_key() == key:
-                return item
-        return None
+        if self.h[i]:
+            return self.h[i]
+        else:
+            return None
 
     # Delete Function
     # Search for key, if found, remove from bucket.
     def remove(self, key):
         i = self._hash(key)
-        b = self.h[i]
-
-        if b is not None:
-            for item in b:
-                if item.get_key() == key:
-                    b.remove(item)
+        self.h[i] = None
 
     # Returns the size of the hashtable
     def get_size(self):
         return self.size
 
-    # def __iter__(self):
-    #    for x in self.h:
-    #        yield x
-
-    # Print a single buckets contents to the console
-    def print_bucket(self, key):
-        i = self._hash(key)
-        b = self.h[i]
-        if b is not None:
-            for item in b:
-                # print('[{}: {}]'.format(item.get_key(), item.get_data()), end=' ')
-                item.get_data().print_package()
-        # Test formatting - Print None for empty buckets
-        else:
-            print(None)
+    def __iter__(self):
+        for x in self.h:
+            yield x

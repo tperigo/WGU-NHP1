@@ -1,7 +1,13 @@
-from Hashtable import print_hashtable
-from ReadCSV import import_csv_file
+from Database import print_package_table
 
-f = import_csv_file('WGUPS Package File.csv')
+from ReadCSV import import_csv_package_file, import_csv_distance_file
 
-print_hashtable(f)
+pf = import_csv_package_file('WGUPS Package File.csv')
+
+# distance_table = import_csv_distance_file('WGUPS Distance Table.csv')
+
+print_package_table(pf)
+print('--')
+
+print_package_table(pf)
 
