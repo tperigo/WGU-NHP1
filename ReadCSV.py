@@ -20,7 +20,7 @@ def import_csv_distance_file(filename):
     with open(filename) as csv_file:
         f = csv.reader(csv_file, delimiter=',')
         for row in f:
-            row[0] = row[0].lstrip(' ').replace('\n', ' - ')
+            row[0] = row[0].lstrip(' ').replace('\n', ' ')
             distance_list.append(row)
     return distance_list
 

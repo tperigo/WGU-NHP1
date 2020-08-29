@@ -1,8 +1,8 @@
 import numpy
-from Graph import Graph
+from Graph import Graph, Vertex
 from ReadCSV import import_csv_distance_file, to_dictionary
 
-dl = import_csv_distance_file('WGUPS Distance Table.csv')
+dl = import_csv_distance_file('resources/WGUPS Distance Table.csv')
 
 distance_matrix = dl
 
@@ -20,11 +20,23 @@ for row in distance_matrix:
 g = Graph()
 
 for loc in locations:
-    g.add_vertex(loc)
+    g.add_vertex(Vertex(loc))
 
-for loc in locations:
-    for loc2 in locations:
-        g.add_d_edge(loc, loc2, dl[locations.index(loc)][locations.index(loc2)])
 
-print(g.adjacency_dict)
-print(g.edge_weights.keys())
+# g.add_d_edge(v1, v2, dl[locations.index(loc)][locations.index(loc2)])
+
+for vert in g.adjacency_dict.keys():
+    for vert2 in g.adjacency_dict.keys():
+        g.add_d_edge(vert, vert2, dl[locations.index(vert.label)][locations.index(vert2.label)])
+
+for k, v in g.adjacency_dict.items():
+    print('--')
+    print(k.label)
+    for i in v:
+        print(i.label)
+
+for k, v in g.edge_weights.items():
+    print('Distance from {} to {}: {}'.format(k[0].label, k[1].label, v))
+
+
+priority_list_locations = ()
