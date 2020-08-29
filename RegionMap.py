@@ -22,9 +22,6 @@ g = Graph()
 for loc in locations:
     g.add_vertex(Vertex(loc))
 
-
-# g.add_d_edge(v1, v2, dl[locations.index(loc)][locations.index(loc2)])
-
 for vert in g.adjacency_dict.keys():
     for vert2 in g.adjacency_dict.keys():
         g.add_d_edge(vert, vert2, dl[locations.index(vert.label)][locations.index(vert2.label)])
