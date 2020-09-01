@@ -23,16 +23,3 @@ def import_csv_distance_file(filename):
             row[0] = row[0].lstrip(' ').replace('\n', ' ')
             distance_list.append(row)
     return distance_list
-
-
-# Converts the distance list to a dictionary.
-def to_dictionary(_list):
-    d = {}
-    for row in _list:
-        d[row[0]] = []
-        iter_row = iter(row)
-        next(iter_row)
-        for value in iter_row:
-            if value != '':
-                d[row[0]].append(float(value))
-    return d
