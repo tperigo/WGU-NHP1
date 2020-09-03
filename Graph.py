@@ -7,6 +7,7 @@ class Vertex:
         self.distance = float('inf')
         self.pred_vertex = None
         self.visited = False
+        self.has_delivery = False
 
 
 class Graph:
@@ -69,6 +70,28 @@ def gsp(start_vertex, end_vertex):
         current_vertex = current_vertex.pred_vertex
     path = start_vertex.label + path
     return path
+
+
+def print_gsp(g, v):
+    dsp(g, v)
+    for v in sorted(g.adjacency_list, key=operator.attrgetter("distance")):
+        if v.pred_vertex is None and v is not list(g.adjacency_list.keys())[0]:
+            print("A to %s: no path exists" % v.label)
+        else:
+            print("A to %s: %s (total distance: %g)" % (v.label, gsp(list(g.adjacency_list.keys())[0], v), v.distance))
+
+
+def print_priority_gsp(g, v):
+    dsp(g, v)
+    for v in sorted(g.adjacency_list, key=operator.attrgetter("distance")):
+        if v.has_delivery:
+            if v.pred_vertex is None and v is not list(g.adjacency_list.keys())[0]:
+                print("A to %s: no path exists" % v.label)
+            else:
+                print("%s to %s: %s (total distance: %g)" % (v.pred_vertex.label,
+                v.label, gsp(list(g.adjacency_list.keys())[0], v), v.distance))
+                v.has_delivery = False
+                return v
 
 
 def nearest_neighbor(g, start_vertex):
@@ -134,3 +157,5 @@ def check_locations(_list, _graph):
         if found is False:
             for v in _graph.adjacency_list:
                 print("-Error || " + location + ' |x| ' + v.label)
+
+
