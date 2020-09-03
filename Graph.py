@@ -117,3 +117,20 @@ def tsp_nn(g, start_vertex):
     current_vertex.visited = True
     print(start_vertex.label, '- {:0.1f}'.format(total_miles))
     print("---Route Complete---")
+
+
+# Checks if locations are in the graph
+def check_locations(_list, _graph):
+    for location in _list:
+        print("Checking " + location)
+        found = False
+        for v in _graph.adjacency_list:
+            if location == v.label:
+                print("Match found || " + location + ' || ' + v.label)
+                found = True
+                break
+            else:
+                found = False
+        if found is False:
+            for v in _graph.adjacency_list:
+                print("-Error || " + location + ' |x| ' + v.label)

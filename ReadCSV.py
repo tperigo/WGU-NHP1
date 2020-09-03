@@ -9,7 +9,9 @@ def import_csv_package_file(filename):
     with open(filename) as csv_file:
         f = csv.reader(csv_file, delimiter=',')
         for row in f:
-            p = Package(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
+            p = Package(row[0], row[1].upper()
+                        .replace(' SOUTH', ' S').replace(' WEST', ' W').replace(' NORTH', ' N')
+                        .replace(' EAST', ' E'), row[2].upper(), row[3].upper(), row[4], row[5], row[6], row[7])
             h.set(int(p.get_package_id()), p)
         return h
 
@@ -20,6 +22,7 @@ def import_csv_distance_file(filename):
     with open(filename) as csv_file:
         f = csv.reader(csv_file, delimiter=',')
         for row in f:
-            row[0] = row[0].lstrip(' ').replace('\n', ' ')
+            row[0] = row[0].upper().lstrip(' ').replace('\n', ' ').replace('(', '').replace(')', '')\
+                .replace(' SOUTH', ' S').replace(' WEST', ' W').replace(' NORTH', ' N').replace(' EAST', ' E')
             distance_list.append(row)
     return distance_list

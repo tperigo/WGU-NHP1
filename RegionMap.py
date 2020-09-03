@@ -17,9 +17,6 @@ def create_map():
             t = distance_matrix[i][j]
             distance_matrix[j][i] = t
 
-    # for row in distance_matrix:
-    #     print(row)
-
     g = Graph()
 
     vertex_0 = Vertex(locations[0])
@@ -88,11 +85,6 @@ def create_map():
     #     print(k.label)
     #     for i in v:
     #         print(i.label)
-    #
-    # for k, v in g.edge_weights.items():
-    #     print('Distance from {} to {}: {}'.format(k[0].label, k[1].label, v))
-
-    # dsp(g, vertex_0)
     #
     # for v in sorted(g.adjacency_list, key=operator.attrgetter("label")):
     #     if v.pred_vertex is None and v is not vertex_0:
