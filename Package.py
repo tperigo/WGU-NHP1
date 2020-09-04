@@ -1,7 +1,7 @@
 # Class defining a Package object
 class Package:
     def __init__(self, package_id, address, city, state, zip_code, deadline,
-                 weight, notes, status='At Hub'):
+                 weight, notes, status='AT HUB'):
         self.package_id = package_id
         self.address = address
         self.city = city

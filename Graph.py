@@ -29,6 +29,10 @@ class Graph:
         self.add_directed_edge(a, b, w)
         self.add_directed_edge(b, a, w)
 
+    def reset_delivery_locations(self):
+        for v in self.adjacency_list:
+            v.has_delivery = False
+
 
 def dsp(g, start_vertex):
     # Put all vertices in an unvisited queue.
@@ -82,18 +86,6 @@ def print_gsp(g, v):
             print("A to %s: %s (total distance: %g)" % (v.label, gsp(list(g.adjacency_list.keys())[0], v), v.distance))
 
 
-# def print_priority_gsp(g, v):
-#     dsp(g, v)
-#     for v in sorted(g.adjacency_list, key=operator.attrgetter("distance")):
-#         if v.has_delivery:
-#             if v.pred_vertex is None and v is not list(g.adjacency_list.keys())[0]:
-#                 print("A to %s: no path exists" % v.label)
-#             else:
-#                 print("%s to %s: %s (total distance: %g)" % (v.pred_vertex.label,
-#                 v.label, gsp(list(g.adjacency_list.keys())[0], v), v.distance))
-#                 v.has_delivery = False
-#                 return v
-
 def print_priority_gsp(g, v):
     dsp(g, v)
     for v in sorted(g.adjacency_list, key=operator.attrgetter("distance")):
@@ -144,37 +136,36 @@ def tsp_nd(g, start_vertex, number_of_stops, truck):
     unload_list = []
     # Start
     print("---Route Start---")
-    print(first_vertex.label, '- {:0.1f}'.format(total_miles))
+    print('Current location:', first_vertex.label, '- Current mileage: {:0.1f}'.format(total_miles))
     first_vertex.visited = True
 
     # Find Nearest delivery to Start
     current_vertex = nearest_delivery(g, first_vertex)
     total_miles += current_vertex.distance
     current_vertex.visited = True
-    print(current_vertex.label, '- {:0.1f}'.format(total_miles))
+    print('Current location:', current_vertex.label, '- Current mileage: {:0.1f}'.format(total_miles))
     for p in truck.on_truck:
         if str(p.get_address() + ' ' + p.get_zip_code()) == current_vertex.label:
             unload_list.append(p)
 
     for p in unload_list:
-        truck.unload_package(p)
-        print('Package ID {} has been delivered to {}.'.format(p.get_package_id(), current_vertex.label))
+        truck.deliver_package(p)
+        print('** Package ID {} has been delivered to {} **'.format(p.get_package_id(), current_vertex.label))
     unload_list.clear()
 
-
     # Find nearest delivery again
-    while number_of_stops > 1:
+    while number_of_stops >=2 :
         next_v = nearest_delivery(g, current_vertex)
         total_miles += next_v.distance
         next_v.visited = True
-        print(next_v.label, '- {:0.1f}'.format(total_miles))
+        print('Current location:', next_v.label, '- Current mileage: {:0.1f}'.format(total_miles))
         for p in truck.on_truck:
             if str(p.get_address() + ' ' + p.get_zip_code()) == next_v.label:
                 unload_list.append(p)
 
         for p in unload_list:
-            truck.unload_package(p)
-            print('Package ID {} has been delivered to {}.'.format(p.get_package_id(), next_v.label))
+            truck.deliver_package(p)
+            print('** Package ID {} has been delivered to {} **'.format(p.get_package_id(), next_v.label))
         unload_list.clear()
 
         current_vertex = next_v
@@ -184,7 +175,7 @@ def tsp_nd(g, start_vertex, number_of_stops, truck):
     # TODO - Check DSP from last to HUB
     total_miles += float(g.edge_weights[current_vertex, start_vertex])
     current_vertex.visited = True
-    print(start_vertex.label, '- {:0.1f}'.format(total_miles))
+    print('Current location:', start_vertex.label, '- Total mileage: {:0.1f}'.format(total_miles))
     print("---Route Complete---")
 
 
