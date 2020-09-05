@@ -1,9 +1,13 @@
 import csv
+import datetime
+
 from Hashtable import Hashtable
 from Package import Package
 
+t_date = datetime.datetime.today()
 
-# Reads a CSV file as input and parses the data into a hashtable of package objects.
+
+# Reads a CSV file as input and parses the data into a hashtable of package objects
 def import_csv_package_file(filename):
     h = Hashtable()
     with open(filename) as csv_file:
@@ -12,6 +16,7 @@ def import_csv_package_file(filename):
             p = Package(row[0], row[1].upper()
                         .replace(' SOUTH', ' S').replace(' WEST', ' W').replace(' NORTH', ' N')
                         .replace(' EAST', ' E'), row[2].upper(), row[3].upper(), row[4], row[5], row[6], row[7])
+            p.set_time_stamp(datetime.datetime(t_date.year, t_date.month, t_date.day, 00, 00, 00))
             h.set(int(p.get_package_id()), p)
         return h
 

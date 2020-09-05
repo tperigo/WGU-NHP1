@@ -104,8 +104,8 @@ def tsp_nd(g, start_vertex, number_of_stops, truck):
     total_miles = 0.0
 
     # Start
-    print('---Route Start on ' + datetime.datetime.strftime(truck.get_time(), '%H:%M:%S') + '---')
-    print('Truck 0{} Departing {} - Current mileage: {:0.1f}'.format(truck.truck_id, first_vertex.label, total_miles))
+    print('--- Route Start on ' + datetime.datetime.strftime(truck.get_time(), '%H:%M:%S') + ' ---')
+    print('Truck 0{} - {} - Departing {} - Current mileage: {:0.1f}'.format(truck.truck_id, truck.driver, first_vertex.label, total_miles))
     first_vertex.visited = True
 
     # Find Nearest delivery to Start
@@ -121,7 +121,7 @@ def tsp_nd(g, start_vertex, number_of_stops, truck):
 
     for p in unload_list:
         truck.deliver_package(p)
-        print('  ** Package ID {} has been delivered to {} **'.format(p.get_package_id(), current_vertex.label))
+        print('  * Package ID {} has been delivered to {} *'.format(p.get_package_id(), current_vertex.label))
     unload_list.clear()
 
     # Find nearest delivery again
@@ -137,7 +137,7 @@ def tsp_nd(g, start_vertex, number_of_stops, truck):
 
         for p in unload_list:
             truck.deliver_package(p)
-            print('  ** Package ID {} has been delivered to {} **'.format(p.get_package_id(), next_v.label))
+            print('  * Package ID {} has been delivered to {} *'.format(p.get_package_id(), next_v.label))
         unload_list.clear()
 
         current_vertex = next_v
@@ -149,8 +149,53 @@ def tsp_nd(g, start_vertex, number_of_stops, truck):
     print('Current location:', start_vertex.label, '- Total mileage: {:0.1f}'.format(total_miles))
     truck.travel(float(g.edge_weights[current_vertex, start_vertex]))
 
-    print('---Route Complete on ' + datetime.datetime.strftime(truck.get_time(), '%H:%M:%S') + '---')
+    print('--- Route Complete on ' + datetime.datetime.strftime(truck.get_time(), '%H:%M:%S') + ' ---')
     print('')
+
+
+def tsp_nd_bg(g, start_vertex, number_of_stops, truck):
+    first_vertex = start_vertex
+    total_miles = 0.0
+
+    # Start
+    first_vertex.visited = True
+
+    # Find Nearest delivery to Start
+    current_vertex = nearest_delivery(g, first_vertex)
+    total_miles += current_vertex.distance
+    current_vertex.visited = True
+    truck.travel(current_vertex.distance)
+    unload_list = []
+    for p in truck.on_truck:
+        if str(p.get_address() + ' ' + p.get_zip_code()) == current_vertex.label:
+            unload_list.append(p)
+
+    for p in unload_list:
+        truck.deliver_package(p)
+    unload_list.clear()
+
+    # Find nearest delivery again
+    while number_of_stops >= 2:
+        next_v = nearest_delivery(g, current_vertex)
+        total_miles += next_v.distance
+        next_v.visited = True
+        truck.travel(next_v.distance)
+        for p in truck.on_truck:
+            if str(p.get_address() + ' ' + p.get_zip_code()) == next_v.label:
+                unload_list.append(p)
+
+        for p in unload_list:
+            truck.deliver_package(p)
+        unload_list.clear()
+
+        current_vertex = next_v
+        number_of_stops -= 1
+
+    # Return to Hub
+    total_miles += float(g.edge_weights[current_vertex, start_vertex])
+    current_vertex.visited = True
+
+    truck.travel(float(g.edge_weights[current_vertex, start_vertex]))
 
 
 # Checks if locations are in the graph

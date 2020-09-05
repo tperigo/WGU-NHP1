@@ -1,4 +1,10 @@
 # Class defining a Package object
+import copy
+import datetime
+
+t_date = datetime.datetime.today()
+
+
 class Package:
     def __init__(self, package_id, address, city, state, zip_code, deadline,
                  weight, notes, status='AT HUB'):
@@ -11,6 +17,11 @@ class Package:
         self.weight = weight
         self.notes = notes
         self.status = status
+        self.history = {}
+        self.time_stamp = datetime.datetime(t_date.year, t_date.month, t_date.day, 00, 00, 00)
+
+    def get_self(self):
+        return self
 
     def get_package_id(self):
         return self.package_id
@@ -41,6 +52,12 @@ class Package:
     def get_status(self):
         return self.status
 
+    def get_time_stamp(self):
+        return self.time_stamp
+
+    def get_history(self):
+        return self.history
+
     def set_package_id(self, package_id):
         self.package_id = package_id
 
@@ -67,6 +84,11 @@ class Package:
 
     def set_status(self, status):
         self.status = status
+
+    def set_time_stamp(self, time_stamp):
+        self.time_stamp = time_stamp
+        # time_str = self.time_stamp.strftime("%H:%M")
+        self.history[time_stamp] = Package(self.package_id, self.address, self.city, self.state, self.zip_code, self.deadline, self.weight, self.notes, self.status)
 
     def print_package(self):
         print('Package ID: {}\n'

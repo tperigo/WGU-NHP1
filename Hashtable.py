@@ -28,7 +28,7 @@ class Hashtable:
             self.h[i] = []
             self.h[i].append([key, value])
 
-    # Get / Search Function.
+    # Get / Look up Function.
     # Search for key. Return key if found, else return None
     def get(self, key):
         i = self._hash(key)
