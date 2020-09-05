@@ -3,11 +3,9 @@ Theo Perigo
 
 """
 from UserInterface import UserInterface
-from WGUPS import wgups
 
 UserInterface()
 
-# wgups()
-
-
-# TODO - Finish UI / Clean up and Documentation
+# TODO - TIME functions for UI
+# TODO - Clean up
+# TODO - Comments / BIG O / Documentations

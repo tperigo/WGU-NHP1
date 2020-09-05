@@ -1,5 +1,7 @@
 from time import sleep
 
+from WGUPS import master_package_table, print_package_table, simulate_delivery
+
 
 def UserInterface():
     intro()
@@ -7,7 +9,7 @@ def UserInterface():
 
 
 def intro():
-    print('------====== WGUPS ver. 0.9.1 BETA ======------\n')
+    print('\n------====== WGUPS CLI ver. 0.9.1 BETA ======------\n')
 
 
 def main_menu():
@@ -26,7 +28,7 @@ def mm_options(user_input):
     elif user_input == '2':
         run_print_package_table()
     elif user_input == '3':
-        run_wgups()
+        run_simulation()
     elif user_input == '4':
         run_exit()
     else:
@@ -54,17 +56,99 @@ def run_lookup():
 
     if user_input == '1':
         val = input('    Please enter a Package ID: ')
+        for b in master_package_table:
+            for i in b:
+                if i[1].get_package_id() == val:
+                    print('')
+                    i[1].print_package()
+                    return run_lookup()
+        print("        Package with specified ID not found.")
+        run_lookup()
 
     elif user_input == '2':
         val = input('    Please enter a Delivery Address: ')
+        package_list = []
+        for b in master_package_table:
+            for i in b:
+                if val.upper() \
+                        .replace(' SOUTH', ' S') \
+                        .replace(' WEST', ' W') \
+                        .replace(' NORTH', 'N') \
+                        .replace(' EAST', ' E') in i[1].get_address():
+                    package_list.append(i[1])
+
+        if len(package_list) > 0:
+            print('')
+            for p in package_list:
+                p.print_package()
+            run_lookup()
+        else:
+            print("        Package with specified address not found.")
+            run_lookup()
+
     elif user_input == '3':
         val = input('    Please enter a Delivery Deadline: ')
+        package_list = []
+        for b in master_package_table:
+            for i in b:
+                if i[1].get_deadline() == val.upper():
+                    package_list.append(i[1])
+        if len(package_list) > 0:
+            print('')
+            for p in package_list:
+                p.print_package()
+            run_lookup()
+        else:
+            print("        Package with specified deadline not found.")
+            run_lookup()
+
     elif user_input == '4':
         val = input('    Please enter a Delivery Zip Code: ')
+        package_list = []
+        for b in master_package_table:
+            for i in b:
+                if i[1].get_zip_code() == val:
+                    package_list.append(i[1])
+        if len(package_list) > 0:
+            print('')
+            for p in package_list:
+                p.print_package()
+            run_lookup()
+        else:
+            print("        Package with specified zip code not found.")
+            run_lookup()
+
     elif user_input == '5':
         val = input('    Please enter a Package Weight: ')
+        package_list = []
+        for b in master_package_table:
+            for i in b:
+                if i[1].get_weight() == val:
+                    package_list.append(i[1])
+        if len(package_list) > 0:
+            print('')
+            for p in package_list:
+                p.print_package()
+            run_lookup()
+        else:
+            print("        Package with specified weight not found.")
+            run_lookup()
+
     elif user_input == '6':
         val = input('    Please enter a Delivery Status: ')
+        package_list = []
+        for b in master_package_table:
+            for i in b:
+                if i[1].get_status().upper() == val.upper():
+                    package_list.append(i[1])
+        if len(package_list) > 0:
+            print('')
+            for p in package_list:
+                p.print_package()
+            run_lookup()
+        else:
+            print("        Package with specified status not found.")
+            run_lookup()
     elif user_input == '7':
         main_menu()
     else:
@@ -73,8 +157,14 @@ def run_lookup():
 
 
 def run_print_package_table():
-    pass
+    print('\n------====== PACKAGE TABLE ======------\n')
+    print_package_table(master_package_table)
+    print('')
+    main_menu()
 
 
-def run_wgups():
-    pass
+def run_simulation():
+    print('\n------====== DELIVERY SIMULATION ======------\n')
+    simulate_delivery()
+    print('')
+    main_menu()

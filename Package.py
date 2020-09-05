@@ -69,11 +69,31 @@ class Package:
         self.status = status
 
     def print_package(self):
-        # TODO - If NoneType
-            print('{} {}, {}, {}, {} - {} - {} - {} - {}'.format(self.get_package_id(), self.get_address(),
-                                                                 self.get_city(),
-                                                                 self.get_state(), self.get_zip_code(),
-                                                                 self.get_deadline(),
-                                                                 self.get_weight(), self.get_notes(),
-                                                                 self.get_status()))
+        print('Package ID: {}\n'
+              'Address: {}\n'
+              'City: {}\n'
+              'State: {}\n'
+              'Zip Code: {}\n'
+              'Delivery Deadline: {}\n'
+              'Package Weight {} kg\n'
+              'Special Notes: {}\n'
+              'Status: {}\n'.format(self.get_package_id(),
+                                    self.get_address(),
+                                    self.get_city(),
+                                    self.get_state(),
+                                    self.get_zip_code(),
+                                    self.get_deadline(),
+                                    self.get_weight(),
+                                    self.get_notes(),
+                                    self.get_status()))
 
+    def print_package_horizontal(self):
+        print('    {}  |    {}, {}, {}, {}    |  {}  |  {} kg  |  {}  |  {} '.format(self.get_package_id(),
+                                                                                     self.get_address(),
+                                                                                     self.get_city(),
+                                                                                     self.get_state(),
+                                                                                     self.get_zip_code(),
+                                                                                     self.get_deadline(),
+                                                                                     self.get_weight(),
+                                                                                     self.get_notes(),
+                                                                                     self.get_status()))

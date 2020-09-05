@@ -1,8 +1,7 @@
 # Hashtable class implementation
 # Custom made for WGUPS
 # All keys are known before hand. No collision.
-# TODO - Eventually upgrade and set up buckets for collision
-class Hashtable():
+class Hashtable:
     # Initializes hashtable - creating a table 'h' of initial_size with each index set to None
     def __init__(self, initial_size=40):
         self.size = initial_size
