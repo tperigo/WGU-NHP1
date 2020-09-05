@@ -1,4 +1,6 @@
+import datetime
 import operator
+from ReadCSV import import_csv_distance_file
 
 
 class Vertex:
@@ -28,10 +30,6 @@ class Graph:
     def add_undirected_edge(self, a, b, w=1.0):
         self.add_directed_edge(a, b, w)
         self.add_directed_edge(b, a, w)
-
-    def reset_delivery_locations(self):
-        for v in self.adjacency_list:
-            v.has_delivery = False
 
 
 def dsp(g, start_vertex):
@@ -86,35 +84,6 @@ def print_gsp(g, v):
             print("A to %s: %s (total distance: %g)" % (v.label, gsp(list(g.adjacency_list.keys())[0], v), v.distance))
 
 
-def print_priority_gsp(g, v):
-    dsp(g, v)
-    for v in sorted(g.adjacency_list, key=operator.attrgetter("distance")):
-        if v.has_delivery:
-            if v.pred_vertex is None and v is not list(g.adjacency_list.keys())[0]:
-                print("A to %s: no path exists" % v.label)
-            else:
-                print("%s to %s: %s (total distance: %g)" % (v.pred_vertex.label,
-                                                             v.label, gsp(list(g.adjacency_list.keys())[0], v),
-                                                             v.distance))
-                v.has_delivery = False
-                return v
-
-
-def nearest_neighbor(g, start_vertex):
-    dsp(g, start_vertex)
-    min_distance = float('inf')
-    nearest_v = start_vertex
-
-    for v in g.adjacency_list:
-        if v.pred_vertex is None and v is not start_vertex and v.visited is not True:
-            print("A to %s: no path exists" % v.label)
-        else:
-            if min_distance > v.distance != 0:
-                min_distance = v.distance
-                nearest_v = v
-    return nearest_v
-
-
 def nearest_delivery(g, start_vertex):
     dsp(g, start_vertex)
     min_distance = float('inf')
@@ -133,9 +102,10 @@ def nearest_delivery(g, start_vertex):
 def tsp_nd(g, start_vertex, number_of_stops, truck):
     first_vertex = start_vertex
     total_miles = 0.0
-    unload_list = []
+
     # Start
     print("---Route Start---")
+    print(truck.get_time())
     print('Current location:', first_vertex.label, '- Current mileage: {:0.1f}'.format(total_miles))
     first_vertex.visited = True
 
@@ -144,6 +114,8 @@ def tsp_nd(g, start_vertex, number_of_stops, truck):
     total_miles += current_vertex.distance
     current_vertex.visited = True
     print('Current location:', current_vertex.label, '- Current mileage: {:0.1f}'.format(total_miles))
+    truck.travel(current_vertex.distance)
+    unload_list = []
     for p in truck.on_truck:
         if str(p.get_address() + ' ' + p.get_zip_code()) == current_vertex.label:
             unload_list.append(p)
@@ -154,11 +126,12 @@ def tsp_nd(g, start_vertex, number_of_stops, truck):
     unload_list.clear()
 
     # Find nearest delivery again
-    while number_of_stops >=2 :
+    while number_of_stops >= 2:
         next_v = nearest_delivery(g, current_vertex)
         total_miles += next_v.distance
         next_v.visited = True
         print('Current location:', next_v.label, '- Current mileage: {:0.1f}'.format(total_miles))
+        truck.travel(next_v.distance)
         for p in truck.on_truck:
             if str(p.get_address() + ' ' + p.get_zip_code()) == next_v.label:
                 unload_list.append(p)
@@ -172,44 +145,12 @@ def tsp_nd(g, start_vertex, number_of_stops, truck):
         number_of_stops -= 1
 
     # Return to Hub
-    # TODO - Check DSP from last to HUB
     total_miles += float(g.edge_weights[current_vertex, start_vertex])
     current_vertex.visited = True
     print('Current location:', start_vertex.label, '- Total mileage: {:0.1f}'.format(total_miles))
-    print("---Route Complete---")
+    truck.travel(float(g.edge_weights[current_vertex, start_vertex]))
 
-
-def tsp_nn(g, start_vertex):
-    first_vertex = start_vertex
-    total_miles = 0.0
-    total_locations = len(g.adjacency_list)
-    # Start
-    print("---Route Start---")
-    print(first_vertex.label, '- {:0.1f}'.format(total_miles))
-    first_vertex.visited = True
-
-    # Find Nearest city to Start
-    current_vertex = nearest_neighbor(g, first_vertex)
-    total_miles += current_vertex.distance
-    current_vertex.visited = True
-    print(current_vertex.label, '- {:0.1f}'.format(total_miles))
-
-    # Find nearest neighbor
-    while total_locations > 2:
-        next_v = nearest_neighbor(g, current_vertex)
-        total_miles += next_v.distance
-        # del region_map.adjacency_list[current_vertex]
-        current_vertex.visited = True
-        print(next_v.label, '- {:0.1f}'.format(total_miles))
-        current_vertex = next_v
-        total_locations -= 1
-
-    # Return to Hub
-    # TODO - Check DSP from last to HUB
-    total_miles += float(g.edge_weights[current_vertex, start_vertex])
-    current_vertex.visited = True
-    print(start_vertex.label, '- {:0.1f}'.format(total_miles))
-    print("---Route Complete---")
+    print("---Route Complete---" + datetime.datetime.strftime(truck.get_time(), '%H:%M:%S'))
 
 
 # Checks if locations are in the graph
@@ -227,3 +168,26 @@ def check_locations(_list, _graph):
         if found is False:
             for v in _graph.adjacency_list:
                 print("-Error || " + location + ' |x| ' + v.label)
+
+
+def create_map():
+    distance_matrix = import_csv_distance_file('resources/WGUPS Distance Table.csv')
+    locations = []
+    g = Graph()
+
+    for row in distance_matrix:
+        locations.append(row[0])
+        del row[0]
+    for i in range(len(distance_matrix)):
+        for j in range(i + 1):
+            t = distance_matrix[i][j]
+            distance_matrix[j][i] = t
+
+    for v in locations:
+        g.add_vertex(Vertex(v))
+
+    for vert in g.adjacency_list.keys():
+        for vert2 in g.adjacency_list.keys():
+            g.add_undirected_edge(vert, vert2,
+                                  distance_matrix[locations.index(vert.label)][locations.index(vert2.label)])
+    return g
