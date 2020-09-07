@@ -1,6 +1,5 @@
 import datetime
 from time import sleep
-
 from Graph import tsp_nd, tsp_nd_bg
 from Graph import create_map
 from ReadCSV import import_csv_package_file
@@ -12,7 +11,6 @@ package_queue = []
 destinations = []
 
 t_date = datetime.datetime.today()
-clock = datetime.datetime(t_date.year, t_date.month, t_date.day, 8, 00, 00)
 
 
 def initialize_package_table():
@@ -196,7 +194,7 @@ def simulate_delivery_output():
             if 'DELIVERED' in i[1].get_status():
                 delivered_count += 1
 
-    # Stat output for console
+    # Stats output for console
     print('\n--- STATS ---')
     print('Packages delivered: ' + str(delivered_count) + ' out of ' + str(len(list(master_package_table))))
     print('Total miles traveled across all routes: {}'.format(total_mileage))
@@ -214,6 +212,7 @@ def simulate_delivery_output():
     m, s = divmod(r, 60)
     print('Total duration: {:02} hours {:02} minutes '.format(int(h), int(m)))
 
+    print('\n\n. . . Simulation complete')
 
 
 def simulate_delivery():
@@ -245,4 +244,5 @@ def simulate_delivery():
     deliver_bg(truck_01, route_03, destinations)
     total_mileage += truck_01.distance_traveled
 
-    print('\nSimulation Complete')
+    print('Simulation complete')
+    sleep(0.6)

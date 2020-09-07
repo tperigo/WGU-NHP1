@@ -4,7 +4,13 @@ Theo Perigo
 """
 from UserInterface import UserInterface
 
-UserInterface()
 
-# TODO - Clean up
+def main():
+    UserInterface()
+
+
+if __name__ == "__main__":
+    main()
+
+
 # TODO - Comments / BIG O / Documentations

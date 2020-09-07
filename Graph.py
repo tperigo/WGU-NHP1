@@ -32,6 +32,29 @@ class Graph:
         self.add_directed_edge(b, a, w)
 
 
+def create_map():
+    distance_matrix = import_csv_distance_file('resources/WGUPS Distance Table.csv')
+    locations = []
+    g = Graph()
+
+    for row in distance_matrix:
+        locations.append(row[0])
+        del row[0]
+    for i in range(len(distance_matrix)):
+        for j in range(i + 1):
+            t = distance_matrix[i][j]
+            distance_matrix[j][i] = t
+
+    for v in locations:
+        g.add_vertex(Vertex(v))
+
+    for vert in g.adjacency_list.keys():
+        for vert2 in g.adjacency_list.keys():
+            g.add_undirected_edge(vert, vert2,
+                                  distance_matrix[locations.index(vert.label)][locations.index(vert2.label)])
+    return g
+
+
 def dsp(g, start_vertex):
     # Put all vertices in an unvisited queue.
     unvisited_queue = []
@@ -64,26 +87,6 @@ def dsp(g, start_vertex):
                 adj_vertex.pred_vertex = current_vertex
 
 
-def gsp(start_vertex, end_vertex):
-    # Start from end_vertex and build the path backwards.
-    path = ""
-    current_vertex = end_vertex
-    while current_vertex is not start_vertex:
-        path = " -> " + str(current_vertex.label) + str(current_vertex.distance) + path
-        current_vertex = current_vertex.pred_vertex
-    path = start_vertex.label + path
-    return path
-
-
-def print_gsp(g, v):
-    dsp(g, v)
-    for v in sorted(g.adjacency_list, key=operator.attrgetter("distance")):
-        if v.pred_vertex is None and v is not list(g.adjacency_list.keys())[0]:
-            print("A to %s: no path exists" % v.label)
-        else:
-            print("A to %s: %s (total distance: %g)" % (v.label, gsp(list(g.adjacency_list.keys())[0], v), v.distance))
-
-
 def nearest_delivery(g, start_vertex):
     dsp(g, start_vertex)
     min_distance = float('inf')
@@ -105,7 +108,8 @@ def tsp_nd(g, start_vertex, number_of_stops, truck):
 
     # Start
     print('--- Route Start on ' + datetime.datetime.strftime(truck.get_time(), '%H:%M:%S') + ' ---')
-    print('Truck 0{} - {} - Departing {} - Current mileage: {:0.1f}'.format(truck.truck_id, truck.driver, first_vertex.label, total_miles))
+    print('Truck 0{} - {} - Departing {} - Current mileage: {:0.1f}'.format(truck.truck_id, truck.driver,
+                                                                            first_vertex.label, total_miles))
     first_vertex.visited = True
 
     # Find Nearest delivery to Start
@@ -215,24 +219,21 @@ def check_locations(_list, _graph):
                 print("-Error || " + location + ' |x| ' + v.label)
 
 
-def create_map():
-    distance_matrix = import_csv_distance_file('resources/WGUPS Distance Table.csv')
-    locations = []
-    g = Graph()
+def gsp(start_vertex, end_vertex):
+    # Start from end_vertex and build the path backwards.
+    path = ""
+    current_vertex = end_vertex
+    while current_vertex is not start_vertex:
+        path = " -> " + str(current_vertex.label) + str(current_vertex.distance) + path
+        current_vertex = current_vertex.pred_vertex
+    path = start_vertex.label + path
+    return path
 
-    for row in distance_matrix:
-        locations.append(row[0])
-        del row[0]
-    for i in range(len(distance_matrix)):
-        for j in range(i + 1):
-            t = distance_matrix[i][j]
-            distance_matrix[j][i] = t
 
-    for v in locations:
-        g.add_vertex(Vertex(v))
-
-    for vert in g.adjacency_list.keys():
-        for vert2 in g.adjacency_list.keys():
-            g.add_undirected_edge(vert, vert2,
-                                  distance_matrix[locations.index(vert.label)][locations.index(vert2.label)])
-    return g
+def print_gsp(g, v):
+    dsp(g, v)
+    for v in sorted(g.adjacency_list, key=operator.attrgetter("distance")):
+        if v.pred_vertex is None and v is not list(g.adjacency_list.keys())[0]:
+            print("A to %s: no path exists" % v.label)
+        else:
+            print("A to %s: %s (total distance: %g)" % (v.label, gsp(list(g.adjacency_list.keys())[0], v), v.distance))

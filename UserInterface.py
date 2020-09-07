@@ -134,7 +134,7 @@ def run_lookup():
             try:
                 val_time = datetime.datetime.strptime(
                     input('\n    Please enter a time to check delivery status for in HH:MM format (example - \'8:35\' '
-                          'or \'13:12\': '), '%H:%M')
+                          'or \'13:12\'): '), '%H:%M')
                 checked = True
             except ValueError:
                 print('\n        Invalid input. Please try again.')
