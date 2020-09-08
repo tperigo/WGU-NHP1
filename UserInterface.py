@@ -11,7 +11,7 @@ def UserInterface():
 
 
 def intro():
-    print('\n------====== WGUPS CLI ver. 0.9.1 BETA ======------')
+    print('\n------====== WGUPS Command Line Interface | ver. 0.9.1 BETA ======------')
 
 
 def main_menu():
