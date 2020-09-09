@@ -16,9 +16,12 @@ class Hashtable:
 
     # Private Hash Function that takes an int key and returns a hash
     def _hash(self, key):
-        # Hash formula of choice
-        s = len(self.h)
-        return key % s
+        # Default Hash formula
+        # s = len(self.h)
+        # return key % s
+
+        # Perfect hash (for WGUPS Package data). Use the default hash when size and keys are unknown.
+        return key - 1
 
     # Get / Look up Function.
     # Search for key. Return key's value if found, else return None
