@@ -1,20 +1,35 @@
+# Theo Perigo
+# Student ID: 001083908
+# C950 - Data Structures and Algorithms II
+# NHP1 - Performance Assessment - WGUPS Routing Program
+# 09/08/2020
+# UserInterface.py
+
 import datetime
 from time import sleep
-from WGUPS import master_package_table, simulate_delivery, simulate_delivery_output
+from Routing import master_package_table, simulate_delivery, simulate_delivery_output
 
+# Assigns a variable for easy access to today's datetime
 t_date = datetime.datetime.today()
 
 
 def UserInterface():
+    """ Starts the WGUPS command line interface. Calls an intro() function, proceeded by the main_menu() function. """
     intro()
     main_menu()
 
 
 def intro():
+    """ Prints a title intro to the console. """
     print('\n------====== WGUPS Command Line Interface | ver. 0.9.1 BETA ======------')
 
 
 def main_menu():
+    """
+    Prints the main menu with numbered options to the console. The user can then input a number to return a
+    specified function.
+    :return: mm_options(user_input): Calls a function based on the users input string.
+    """
     print('\n------====== MAIN MENU ======------\n')
     print("What would you like to do?")
     print('    1. Look up package(s)\n'
@@ -26,6 +41,11 @@ def main_menu():
 
 
 def mm_options(user_input):
+    """
+    Calls a function based on the users input string.
+    If an invalid input is entered, prints a warning and calls main_menu() again.
+    :param user_input: string - User input string for desired option
+    """
     if user_input == '1':
         run_lookup()
     elif user_input == '2':
@@ -40,12 +60,19 @@ def mm_options(user_input):
 
 
 def run_exit():
+    """ Exits the program. """
     print('\n    Exiting program...')
     sleep(.5)
     exit()
 
 
 def run_lookup():
+    """
+    Runs the package lookup function. This function takes a user input string to specify a type of package attribute
+    to look up. The user then enters the desired package attribute and the program will search the
+    master_package_table HashTable and print the package data for all packages with the given attribute. If an
+    invalid input is entered, prints a warning and calls run_lookup() again.
+    """
     print('\n------====== PACKAGE LOOKUP ======------\n')
     print('Please choose a type of input to lookup: \n'
           '    1. Package ID\n'
@@ -58,59 +85,65 @@ def run_lookup():
     user_input = input('Enter a number: ')
 
     if user_input == '1':
-        val = input('    Please enter a Package ID: ')
-        for b in master_package_table:
-            for i in b:
-                if i[1].get_package_id() == val:
-                    print('')
-                    i[1].print_package()
-                    return run_lookup()
-        print('\n --- No package found ---')
-        run_lookup()
+        key = int(input('    Please enter a Package ID: '))
+        if master_package_table.get(key):
+            print('')
+            master_package_table.get(key).print_package()
+            run_lookup()
+        else:
+            print('\n --- No package found ---')
+            run_lookup()
 
+    # Lookup via delivery address. Can be a full or partial address.
     elif user_input == '2':
         val = input('    Please enter a full or partial delivery address: ')
         package_list = []
-        for b in master_package_table:
-            for i in b:
-                if val.upper() \
-                        .replace(' SOUTH', ' S') \
-                        .replace(' WEST', ' W') \
-                        .replace(' NORTH', 'N') \
-                        .replace(' EAST', ' E') in i[1].get_address():
-                    package_list.append(i[1])
+        for p in master_package_table.get_values():
+            # User can enter a cardinal or its abbreviation.
+            if val.upper().replace(' SOUTH', ' S').replace(' WEST', ' W').replace(' NORTH', 'N').replace(' EAST', ' E') \
+                    in p.get_address():
+                package_list.append(p)
         print_results(package_list)
 
+    # Lookup via delivery deadline.
     elif user_input == '3':
         val = input('    Please enter a delivery deadline: ')
         package_list = []
-        for b in master_package_table:
-            for i in b:
-                if i[1].get_deadline() == val.upper():
-                    package_list.append(i[1])
+        for p in master_package_table.get_values():
+            # Allows partial strings. Eg. '30' will return any deadline containing '30' (10:30, 09:30)
+            # %H or HH. Eg. 09:30 or 9:30 will return any deadline containing 09:30.
+            # Note: While it works, AM and PM could probably be handled better.
+            if val.upper() in p.get_deadline():
+                package_list.append(p)
         print_results(package_list)
 
+    # Lookup via zip code
     elif user_input == '4':
         val = input('    Please enter a delivery zip code: ')
         package_list = []
-        for b in master_package_table:
-            for i in b:
-                if i[1].get_zip_code() == val:
-                    package_list.append(i[1])
+        for p in master_package_table.get_values():
+            if p.get_zip_code() == val:
+                package_list.append(p)
         print_results(package_list)
 
+    # Lookup via package weight.
     elif user_input == '5':
+        # Weight must be in the same format/measurement as given in the WGUPS Package File.
         val = input('    Please enter a package weight: ')
         package_list = []
-        for b in master_package_table:
-            for i in b:
-                if i[1].get_weight() == val:
-                    package_list.append(i[1])
+        for p in master_package_table.get_values():
+            if p.get_weight() == val:
+                package_list.append(p)
         print_results(package_list)
 
+    # Lookup via delivery status.
+    # This code will also allow for the user to input a desired time to lookup packages at that point
+    # in time with the given delivery status.
     elif user_input == '6':
         val = None
         checked = False
+        # User enters the desired status to look up.
+        # Invalid inputs will continue the while loop.
         while not checked:
             print('\n    Please choose a delivery status: \n'
                   '        1. AT HUB\n'
@@ -128,41 +161,38 @@ def run_lookup():
                 checked = True
             else:
                 print('\n        Invalid input. Please try again.')
-        val_time = None
-        checked = False
-        while not checked:
-            try:
-                val_time = datetime.datetime.strptime(
-                    input('\n    Please enter a time to check delivery status for in HH:MM format (example - \'8:35\' '
-                          'or \'13:12\'): '), '%H:%M')
-                checked = True
-            except ValueError:
-                print('\n        Invalid input. Please try again.')
-        formatted_val_time = datetime.datetime(t_date.year, t_date.month, t_date.day, val_time.hour, val_time.minute,
-                                                00)
+
+        formatted_val_time = get_time_input()
+
         print('')
+        # Delivery must be simulated to lookup package status at times during the day.
         simulate_delivery()
         package_list = []
-        for b in master_package_table:
-            for i in b:
-                latest_time_stamp = None
-                for k in i[1].get_history():
-                    if formatted_val_time >= k:
-                        latest_time_stamp = i[1].get_history()[k]
-                if latest_time_stamp:
-                    if val.upper() in latest_time_stamp.get_status().upper():
-                        package_list.append(latest_time_stamp)
+        for p in master_package_table.get_values():
+            # Lookup the latest time stamp in each package's history that is on or before the user given time.
+            latest_time_stamp = None
+            for ts in p.get_history():
+                if formatted_val_time >= ts:
+                    latest_time_stamp = p.get_history()[ts]
+            if latest_time_stamp:
+                if val.upper() in latest_time_stamp.get_status().upper():
+                    package_list.append(latest_time_stamp)
         print_results(package_list)
 
+    # Return to the main menu
     elif user_input == '7':
         main_menu()
 
+    # Prints a warning and runs run_lookup() again.
     else:
         print('\n    Invalid input. Please try again')
         run_lookup()
 
 
 def run_simulation():
+    """ Runs the simulate_delivery_output() function. This function will take the supplied package and distance files
+    as input and utilize the the implemented program algorithms to simulate the day's delivery route and print the
+    results to the console. """
     print('\n------====== DELIVERY SIMULATION ======------\n')
     simulate_delivery_output()
     print('')
@@ -170,37 +200,57 @@ def run_simulation():
 
 
 def run_print_package_table():
+    """ This function will print out a 'snapshot' of all packages and their attributes in the master_package_table
+    HashTable at a given time. """
     print('\n------====== PACKAGE TABLE ======------\n')
-    val_time = None
-    try:
-        val_time = datetime.datetime.strptime(
-            input('    Please enter a time to check delivery status for in HH:MM format (example - \'8:35\' '
-                  'or \'13:12\': '), '%H:%M')
-    except ValueError:
-        print('\n    Invalid input. Please try again')
-        run_print_package_table()
-    formatted_val_time = datetime.datetime(t_date.year, t_date.month, t_date.day, val_time.hour, val_time.minute, 00)
+    formatted_val_time = get_time_input()
+    print('')
     val_time_str = datetime.datetime.strftime(formatted_val_time, '%H:%M')
+    # Delivery must be simulated to lookup package status at times during the day.
     simulate_delivery()
     print('')
     print('Retrieving snapshot of package table data from the specified time: [' + val_time_str + ']\n')
-    for b in master_package_table:
-        for i in b:
-            latest_time_stamp = None
-            for k in i[1].get_history():
-                if formatted_val_time >= k:
-                    latest_time_stamp = i[1].get_history()[k]
-            if latest_time_stamp:
-                latest_time_stamp.print_package_horizontal()
-            else:
-                i[1].get_history()[
-                    datetime.datetime(t_date.year, t_date.month, t_date.day, 00, 00, 00)].print_package_horizontal()
-
+    for p in master_package_table.get_values():
+        # Lookup the latest time stamp in each package's history that is on or before the user given time,
+        # else prints the default datetime.
+        latest_time_stamp = None
+        for ts in p.get_history():
+            if formatted_val_time >= ts:
+                latest_time_stamp = p.get_history()[ts]
+        if latest_time_stamp:
+            latest_time_stamp.print_package_horizontal()
+        else:
+            p.get_history()[0].print_package_horizontal()
     print('')
+    sleep(0.3)
     main_menu()
 
 
+def get_time_input():
+    """
+    Helper function that takes and validates a user input string for time an returns it in datetime format.
+    :return: datetime of input string
+    """
+    val_time = None
+    checked = False
+    # Invalid inputs will be caught and continue the while loop.
+    while not checked:
+        try:
+            val_time = datetime.datetime.strptime(
+                input('\n    Please enter a time to check delivery status for in HH:MM format (example - \'8:35\' '
+                      'or \'13:12\'): '), '%H:%M')
+            checked = True
+        except ValueError:
+            print('\n        Invalid input. Please try again.')
+    return datetime.datetime(t_date.year, t_date.month, t_date.day, val_time.hour, val_time.minute,
+                             00)
+
+
 def print_results(_list):
+    """
+    Helper function to format and print a given list of results to the console.
+    :param _list: A list of packages to format and print.
+    """
     if len(_list) > 0:
         print('\n--- RESULTS ---\n')
         for p in _list:

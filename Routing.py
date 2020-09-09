@@ -41,21 +41,17 @@ def deliver_bg(t, g, l):
 
 
 def get_priority_packages(package_table):
-    for b in package_table:
-        if b is not None:
-            for i in b:
-                loc = str(i[1].get_address()) + ' ' + str(i[1].get_zip_code())
-                if i[1].get_deadline() != 'EOD' and 'DELAY' not in i[1].get_notes().upper():
-                    priority_package_queue.append(i[1])
-                    priority_destinations.append(loc)
+    for p in master_package_table.get_values():
+        loc = str(p.get_address()) + ' ' + str(p.get_zip_code())
+        if p.get_deadline() != 'EOD' and 'DELAY' not in p.get_notes().upper():
+            priority_package_queue.append(p)
+            priority_destinations.append(loc)
 
 
 def queue_remaining_package_data(package_table):
-    for b in package_table:
-        if b is not None:
-            for i in b:
-                if i[1].get_status() != 'DELIVERED':
-                    package_queue.append(i[1])
+    for p in master_package_table.get_values():
+        if p.get_status() != 'DELIVERED':
+            package_queue.append(p)
 
 
 def load_priority_truck(_truck):
@@ -120,13 +116,14 @@ def special_constraint_09a(package_table):
 def special_constraint_09b(package_table):
     package_table.get(9).set_address('410 S STATE ST')
     package_table.get(9).set_zip_code('84111')
+    package_table.get(9).set_time_stamp(datetime.datetime(t_date.year, t_date.month, t_date.day, 10, 20, 00))
     package_queue.append(package_table.get(9))
 
 
 def print_delivery_flair(x):
-    sleep(x + 0.1)
+    sleep(x)
     print('Running delivery simulation', end='')
-    sleep(x + 0.1)
+    sleep(x)
     print(' . ', end='')
     sleep(x)
     print(' . ', end='')
@@ -189,10 +186,9 @@ def simulate_delivery_output():
     print_package_table(master_package_table)
 
     delivered_count = 0
-    for b in master_package_table:
-        for i in b:
-            if 'DELIVERED' in i[1].get_status():
-                delivered_count += 1
+    for p in master_package_table.get_values():
+        if 'DELIVERED' in p.get_status():
+            delivered_count += 1
 
     # Stats output for console
     print('\n--- STATS ---')
@@ -212,7 +208,9 @@ def simulate_delivery_output():
     m, s = divmod(r, 60)
     print('Total duration: {:02} hours {:02} minutes '.format(int(h), int(m)))
 
+    sleep(0.4)
     print('\n\n. . . Simulation complete')
+    sleep(0.5)
 
 
 def simulate_delivery():
@@ -245,4 +243,4 @@ def simulate_delivery():
     total_mileage += truck_01.distance_traveled
 
     print('Simulation complete')
-    sleep(0.6)
+    sleep(0.3)
