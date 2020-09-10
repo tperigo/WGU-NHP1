@@ -19,6 +19,7 @@ class Package:
     and a copy of the packages attributes at that time. This tracks the changing statuses of the package as it moves
     throughout its delivery route.
     """
+
     def __init__(self, package_id, address, city, state, zip_code, deadline,
                  weight, notes, status='AT HUB'):
         """
@@ -206,14 +207,30 @@ class Package:
     def print_package_horizontal(self):
         """
         Prints out a horizontally formatted package information for a single package to the console.
-        Could be improved with set width and fill formatting.
         """
-        print('    {}  |    {}, {}, {}, {}    |  {}  |  {} kg  |  {}  |  {} '.format(self.get_package_id(),
-                                                                                     self.get_address(),
-                                                                                     self.get_city(),
-                                                                                     self.get_state(),
-                                                                                     self.get_zip_code(),
-                                                                                     self.get_deadline(),
-                                                                                     self.get_weight(),
-                                                                                     self.get_notes(),
-                                                                                     self.get_status()))
+        print('{:<3}| {:<40} | {:<18} | {:<6} | {:<8} | {:<9} | {:<6}  | {:<60}| {} '.format(self.get_package_id(),
+                                                                                             self.get_address(),
+                                                                                             self.get_city(),
+                                                                                             self.get_state(),
+                                                                                             self.get_zip_code(),
+                                                                                             self.get_deadline(),
+                                                                                             self.get_weight(),
+                                                                                             self.get_notes(),
+                                                                                             self.get_status()))
+
+    @staticmethod
+    def print_package_horizontal_labels():
+        """
+        Prints out a horizontally formatted labels to go with the print_package_horizontal() function.
+        """
+        print('{:<3}| {:<40} | {:<18} | {:<6} | {:<8} | {:<9} | {:<6}  | {:<60}| {} '.format('ID',
+                                                                                             'Address',
+                                                                                             'City',
+                                                                                             'State',
+                                                                                             'Zip Code',
+                                                                                             'Deadline',
+                                                                                             'Weight',
+                                                                                             'Special Notes',
+                                                                                             'Status'))
+        print('------------------------------------------------------------------------------------------------------'
+              '----------------------------------------------------------------------------------------------------')

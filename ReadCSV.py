@@ -35,7 +35,6 @@ def import_csv_package_file(filename):
             # Inserts package into the HashTable, with the package ID as the key to be hashed, and the package object
             # paired as the value.
             h.set(int(p.get_package_id()), p)
-
         return h
 
 

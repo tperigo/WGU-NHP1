@@ -54,24 +54,24 @@ class Truck:
         :param p: A package object to deliver.
         """
         self.on_truck.remove(p)
-        p.set_status('DELIVERED by ' + self.driver + ' at ' + self.track_time.strftime("%H:%M:%S"))
+        p.set_status('DELIVERED by ' + self.driver + ' at ' + self.track_time.strftime("%H:%M"))
         p.set_time_stamp(self.track_time)
 
     def unload_package(self, p):
-        '''
-        This function unloads a package from the truck and returns it to the HUB. It takes a package object and removes it from the on_truck[] list.
-        It then sets it status back to 'AT HUB'.
-        :param p: A package object to remove and return to the hub.
-        :return:
-        '''
+        """
+        This function unloads a package from the truck and returns it to the HUB. It takes a package object and
+        removes it from the on_truck[] list. It then sets it status back to 'AT HUB'.
+        :param p: A package object to
+        remove and return to the hub.
+        """
         self.on_truck.remove(p)
         p.set_status('AT HUB')
 
     def set_status(self, status):
-        '''
+        """
         This function sets the Trucks status to the given string.
         :param status: string - Status to set for the Truck
-        '''
+        """
         self.status = status
 
     def get_time(self):
@@ -84,7 +84,7 @@ class Truck:
     def travel(self, distance):
         """
         This function calculates the distance traveled by the truck and the time it took to travel that distance. It
-        takes a float type distance, and sums it with its current distance_travled. Then it calculates the time_delta
+        takes a float type distance, and sums it with its current distance_traveled. Then it calculates the time_delta
         by dividing the distance by the speed (self.AVG_MPH = 18), and adds that time_delta to the current
         self.track_time. Each package also has its time stamp updated every stop the truck makes for tracking purposes.
         :param distance: float - The distance (in miles) for how much the truck just traveled.
