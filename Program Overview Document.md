@@ -9,7 +9,7 @@ It is a heuristically greedy and self-adjusting algorithm
 More information about the algorithm and how the algorithm functions can be found in the following sections. 
  
 ## B1: Logic Comments 
-######The following is a summary of how the core algorithm finds a solution. 
+##### The following is a summary of how the core algorithm finds a solution. 
 
 First, to determine what packages to load onto a truck first, the **priority-first algorithm** looks at package deadline 
 data and places packages into a `priority_queue[]` list based on their deadline.
@@ -284,7 +284,7 @@ def get(self, key):
 ## G: Interface
 The application provides a console based command line interface to allow the user to interact with the program.
 
-###### Demonstration on how to use the User Interface
+##### Demonstration on how to use the User Interface
 At program start, the main menu appears and displays a list of options to the user. 
 
 ```
@@ -443,10 +443,10 @@ constrain checking would need to be automated and improved, as well as expanded 
 constraints that could be found in the package data excel file. 
 
 ## K1: Verification of Data Structure and Solution
-###### Verification of all packages being delivered in <145 miles:
+##### Verification of all packages being delivered in <145 miles:
 The simulation is able to deliver **all 40 packages in 97.3 miles** while meeting all special constraints. 
 
-###### Verification of successful package delivery:
+##### Verification of successful package delivery:
 All Packages are delivered on time according to their constraints outlined in the package notes.
 
 The user can verify the both the mileage and deliveries via the user interface.
@@ -460,7 +460,7 @@ along with some other information. The package table is also displayed so each i
 
 ![H3](https://i.imgur.com/MbRpGSW.png)
 
-###### Verification of a hashtable with a look up function being present:
+##### Verification of a hashtable with a look up function being present:
 The program implements a custom from-scratch  Hashtable data structure. For more information on the Hashtable please read the following items:
 
 >   - Section D: Data Structure
@@ -486,7 +486,7 @@ def get(self, key):
     return None
 ```
 
-###### Verification that reporting is accurate and efficient
+##### Verification that reporting is accurate and efficient
 The application is able to show a listing of all packages and the current status of each package and all their attributes
 at any given time. 
 
