@@ -123,7 +123,7 @@ def dsp(g, start_vertex):
     """
     Ths method defines an implementation of Dijkstra's Shortest Path (DSP) for determining the shortest path from a
     start_vertex to each vertex in a graph 'g'.
-    SOURCE CODE: C960 zyBook 6.11 Algorithm: Dijkstra's Shortest Path.
+    Implementation was based on C960 zyBook 6.11 Algorithm: Dijkstra's Shortest Path.
     :param g: graph - Graph object with vertexes that will have distance and pred_vertex attributes modified as a
     result.
     :param start_vertex: vertex - Start vertex to find the shortest path for.

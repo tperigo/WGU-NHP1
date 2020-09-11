@@ -1,6 +1,4 @@
 # NHP1
-C950 - WGUPS Project
+C950 - WGUPS Project  
+08/26/2020
 
-Learning git-hub for real this time! - 08/26/2020
-
-Testing changes

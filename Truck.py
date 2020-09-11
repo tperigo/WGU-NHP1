@@ -41,7 +41,7 @@ class Truck:
         """
         if len(self.on_truck) < self.MAX_PACKAGES:
             self.on_truck.append(p)
-            p.set_status('EN-ROUTE')
+            p.set_status('EN-ROUTE on Truck 0{}'.format(self.truck_id))
             p.set_time_stamp(self.track_time)
         else:
             print("ERROR: Truck is full. Number of packages loaded: ", len(self.on_truck))

@@ -297,8 +297,10 @@ def get_time_input():
 def print_results(_list, horizontal):
     """
     Helper function to format and print a given list of results to the console.
-    :param _list: A list of packages to format and print.
-    :param horizontal: Boolean - If True, print package contents in horizontal line format. If False, print contents vertically
+    :param _list: A list of packages to
+    format and print.
+    :param horizontal: Boolean - If True, print package contents in horizontal line format. If
+    False, print contents vertically
     """
     if len(_list) > 0:
         print('\n--- RESULTS ---\n')
