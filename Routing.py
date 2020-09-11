@@ -17,21 +17,24 @@ from Truck import Truck
 # Included in this file are the functions used to load packages onto the trucks and deliver them to their destinations,
 # as well as a function to simulate deliveries.
 
+'''O(1)'''
 # Assigns a variable for easy access to today's datetime
 t_date = datetime.datetime.today()
 
+'''O(1)'''
 # Initialize lists for use by functions.
 priority_package_queue = []
 priority_destinations = []
 package_queue = []
 destinations = []
 
-
+'''O(n^2) - import_csv_package_file() is O(n^2)'''
 # Create the package hashtable and assign to variable for use.
 def initialize_master_package_table():
     return import_csv_package_file('resources/WGUPS Package File.csv')
 
 
+'''O(n^2)'''
 def ready_route_data(g, locations):
     """
     This function prepares the vertexes in the graph g's adjacency_list{} by setting their .has_delivery attribute to
@@ -45,6 +48,7 @@ def ready_route_data(g, locations):
                 v.has_delivery = True
 
 
+'''O(n^2)'''
 def deliver(t, g, locations, output):
     """
     Ths function calls all the necessary functions to perform the a delivery operation. First, route data is readied,
@@ -66,6 +70,7 @@ def deliver(t, g, locations, output):
     destinations.clear()
 
 
+'''O(n) - Note ... is .upper() o(n)? then this will be O(n*m) -> O(n^2)'''
 def get_priority_packages(package_table):
     """
     This function determines which PRIORITY packages to load onto the truck. A priority package is one that has a
@@ -82,6 +87,7 @@ def get_priority_packages(package_table):
             priority_destinations.append(loc)
 
 
+'''O(n)'''
 def load_priority_truck(truck):
     """
     This function loads a truck object with the priority packages, also removing it from the queue. If the number of
@@ -96,6 +102,7 @@ def load_priority_truck(truck):
             break
 
 
+'''O(n)'''
 def get_non_priority_packages(package_table):
     """
     This function queues the remaining NON-PRIORITY packages into a new list, package_queue. Any package in the
@@ -107,6 +114,7 @@ def get_non_priority_packages(package_table):
             package_queue.append(p)
 
 
+'''O(n) - Note: is .upper() o(n)?'''
 def load_truck_2(truck):
     """
     This function loads a truck object with packages. Special constraints in the documentation and package file state
@@ -142,6 +150,7 @@ def load_truck_2(truck):
                 return
 
 
+'''O(n)'''
 def load_truck(truck):
     """
     This function loads a truck object with packages. It is a generic version of the load truck function,
@@ -159,6 +168,7 @@ def load_truck(truck):
                 return
 
 
+'''O(n)'''
 def print_package_table(package_table):
     """
     This function prints out all the contents of the package table in horizontal line format.
@@ -168,6 +178,7 @@ def print_package_table(package_table):
         p.print_package_horizontal()
 
 
+'''O(1)'''
 def print_delivery_flair(x):
     """
     This function is for console decoration only. Adds an 'animation' effect when running the delivery simulation.
@@ -186,6 +197,7 @@ def print_delivery_flair(x):
 # The following 3 functions: special_constraint_19, special_constraint_09a, special_constraint_09b were created to deal
 # with 3 special conditions that the system is currently not able to automate. >_<;
 
+'''O(1)'''
 def special_constraint_19(package_table):
     """
     This function deals with a constraint for package 19:
@@ -196,6 +208,7 @@ def special_constraint_19(package_table):
         str(str(package_table.get(19).get_address()) + ' ' + package_table.get(19).get_zip_code()))
 
 
+'''O(1)'''
 def special_constraint_09a(package_table):
     """
     This function deals with a constraint for package 9:
@@ -204,6 +217,7 @@ def special_constraint_09a(package_table):
     package_queue.remove(package_table.get(9))
 
 
+'''O(1)'''
 def special_constraint_09b(package_table):
     """
     This function deals with a constraint for package 9:
@@ -218,6 +232,7 @@ def special_constraint_09b(package_table):
     package_queue.append(package_table.get(9))
 
 
+'''O(n^2)'''
 def simulate_delivery():
     """
     This function calls the necessary functions to simulate the days delivery operation for WGUPS. Currently, package
@@ -268,6 +283,7 @@ def simulate_delivery():
     return master_package_table
 
 
+'''O(n^2)'''
 def simulate_delivery_output():
     """
     The same function as simulate_delivery(), but printed console outputs and a stats printout.

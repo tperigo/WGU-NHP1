@@ -8,6 +8,13 @@
 from UserInterface import UserInterface
 
 
+""" BIG-O Analysis:
+This application runs in polynomial time complexity O(n^2)
+
+Each block of code will have their simplified upper-bound big-0 complexity above it in triple quotes. 
+"""
+
+'''O(n^2)'''
 def main():
     """
     Start the WGUPS program by running the command line interface
@@ -15,5 +22,6 @@ def main():
     UserInterface()
 
 
+'''O(1)'''
 if __name__ == "__main__":
     main()

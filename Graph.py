@@ -15,7 +15,7 @@ class Vertex:
     a distance, a pred_vertex (previous vertex), tracks whether it has been visited with a boolean and tracks
     whether it is a delivery destination.
     """
-
+    '''O(1)'''
     def __init__(self, label):
         """
         Initializes a vertex object
@@ -41,6 +41,7 @@ class Graph:
     a tuple of vertexes and the value being the weight between them.
     """
 
+    '''O(1)'''
     def __init__(self):
         """
         Initializes the graph object.
@@ -50,6 +51,7 @@ class Graph:
         # Initializes an empty edge_weight dictionary.
         self.edge_weights = {}
 
+    '''O(1)'''
     def add_vertex(self, v):
         """
         Adds a vertex to the graph via adding it as a key to the adjacency_list{}.
@@ -57,6 +59,7 @@ class Graph:
         """
         self.adjacency_list[v] = []
 
+    '''O(1)'''
     def add_directed_edge(self, a, b, w=1.0):
         """
         Add a uni-directional edge from A to B and its weight. FROM A -> TO B. Tuple of (a, b) is added to
@@ -68,6 +71,7 @@ class Graph:
         self.edge_weights[(a, b)] = w
         self.adjacency_list[a].append(b)
 
+    '''O(1)'''
     def add_undirected_edge(self, a, b, w=1.0):
         """
         Add a undirected (bi-directional) edge between A and B and its weight. BETWEEN A <-> B. This is done by
@@ -82,6 +86,7 @@ class Graph:
         self.add_directed_edge(b, a, w)
 
 
+'''O(n^2)'''
 def create_map():
     """
     This function creates a graph representing the real world area map of the WGUPS's delivery region. First it
@@ -119,6 +124,7 @@ def create_map():
     return g
 
 
+'''o(n^2)'''
 def dsp(g, start_vertex):
     """
     Ths method defines an implementation of Dijkstra's Shortest Path (DSP) for determining the shortest path from a
@@ -159,7 +165,7 @@ def dsp(g, start_vertex):
                 adj_vertex.distance = alternative_path_distance
                 adj_vertex.pred_vertex = current_vertex
 
-
+'''O(n^2) - Because of dsp()'''
 def nearest_delivery(g, start_vertex):
     """
     This function takes a start_vertex and searches for the closest adjacent vertex that also is a delivery location.
@@ -187,7 +193,7 @@ def nearest_delivery(g, start_vertex):
                 nearest_v = v
     return nearest_v
 
-
+'''O(n^2)'''
 def tsp_nd(g, start_vertex, truck):
     """
     This function defines our custom TSP solution for delivering packages to all delivery vertexes in a graph. It
@@ -248,7 +254,7 @@ def tsp_nd(g, start_vertex, truck):
     current_vertex.visited = True
     truck.travel(float(g.edge_weights[current_vertex, start_vertex]))
 
-
+'''O(n^2)'''
 def tsp_nd_output(g, start_vertex, truck):
     """
     The same function as tsp_nd(), but with printed console outputs. Used to visualize tsp_nd route simulation

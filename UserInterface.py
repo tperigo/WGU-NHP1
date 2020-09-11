@@ -12,10 +12,12 @@ from Hashtable import Hashtable
 from Package import Package
 from Routing import simulate_delivery, simulate_delivery_output
 
+'''O(1)'''
 # Assigns a variable for easy access to today's datetime
 t_date = datetime.datetime.today()
 
 
+'''O(n^2) - main_menu() is O(n^2)'''
 def UserInterface():
     """
     Starts the WGUPS command line interface. Calls an intro() function, proceeded by the main_menu() function.
@@ -24,11 +26,13 @@ def UserInterface():
     main_menu()
 
 
+'''O(1)'''
 def intro():
     """ Prints a title intro to the console. """
     print('\n------====== WGUPS Command Line Interface | ver. 0.9.1 BETA ======------')
 
 
+'''O(n^2) - mm_options() is O(n^2)'''
 def main_menu():
     """
     Prints the main menu with numbered options to the console. The user can then input a number to return a
@@ -45,6 +49,7 @@ def main_menu():
     return mm_options(user_input)
 
 
+'''O(n^2) - create_snapshot() is O(n^2)'''
 def mm_options(user_input):
     """
     Calls a function based on the users input string.
@@ -66,6 +71,7 @@ def mm_options(user_input):
         main_menu()
 
 
+'''O(1)'''
 def run_exit():
     """ Exits the program. """
     print('\n    Exiting program...')
@@ -73,6 +79,7 @@ def run_exit():
     exit()
 
 
+'''O(n^2) - Note: string format .upper is O(m) in a for loop so O(n*m) -> O(n^2)?'''
 def run_lookup(snapshot):
     """
     Runs the package lookup function. This function takes a user input string to specify a type of package attribute
@@ -204,7 +211,7 @@ def run_lookup(snapshot):
         print('\n    Invalid input. Please try again\n')
         run_lookup(snapshot)
 
-
+'''O(n^2) - simulate_delivery_output() is O(n^2)'''
 def run_simulation():
     """
     Runs the simulate_delivery_output() function to simulate the entire day's delivery operation.
@@ -214,7 +221,7 @@ def run_simulation():
     print('')
     main_menu()
 
-
+'''O(n^2)'''
 def create_snapshot():
     """
     This function will create a 'snapshot' copy hashtable of all packages and their attributes in the
@@ -243,7 +250,7 @@ def create_snapshot():
             snapshot.set(int(p.get_package_id()), p.get_history[0])
     return snapshot
 
-
+'''O(n^2)'''
 def snapshot_package_table():
     """
     This function will print a 'snapshot' hashtable of all packages and their attributes in the
@@ -273,7 +280,7 @@ def snapshot_package_table():
     sleep(0.26)
     main_menu()
 
-
+'''O(1)'''
 def get_time_input():
     """
     Helper function that takes and validates a user input string for time an returns it in datetime format.
@@ -293,7 +300,7 @@ def get_time_input():
     return datetime.datetime(t_date.year, t_date.month, t_date.day, val_time.hour, val_time.minute,
                              00)
 
-
+'''O(n)'''
 def print_results(_list, horizontal):
     """
     Helper function to format and print a given list of results to the console.

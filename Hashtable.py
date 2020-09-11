@@ -17,6 +17,7 @@ class Hashtable:
     default hash formula).
     """
 
+    '''O(c)'''
     def __init__(self, initial_size=40):
         """
         Initializes the hashtable, creating a list 'h' of initial_size to be used as the hashtable's base.
@@ -29,6 +30,7 @@ class Hashtable:
         self.keys = []
         self.values = []
 
+    '''O(1) - when __iter__ is called only iterates as one pass... I think...'''
     def __iter__(self):
         """
         Private helper function used to iterate through the hashtable
@@ -36,6 +38,7 @@ class Hashtable:
         for x in self.h:
             yield x
 
+    '''O(1)'''
     def _hash(self, key):
         """
         Function for hashing a key.
@@ -52,6 +55,7 @@ class Hashtable:
         # Expects an int type (package_ID) as the key.
         # return key - 1
 
+    '''O(1) - Worst is O(n) however the current hash guarantees O(1)'''
     def get(self, key):
         """
         This function searches the table and looks up the key. If found the key's value is returned. Else, return none.
@@ -71,6 +75,7 @@ class Hashtable:
                         return bucket[i][1]
         return None
 
+    '''O(1) - Worst is O(n) however the current hash guarantees O(1)'''
     def set(self, key, value):
         """
         This function maps a new (key, value) tuple item to an index in the hashtable determined by the key's hash
@@ -96,7 +101,7 @@ class Hashtable:
             self.keys.append(key)
             self.values.append(value)
 
-    # Search for key, if found, remove from bucket.
+    '''O(1) - Worst is O(n) however the current hash guarantees O(1)'''
     def remove(self, key):
         """
         This function removes the item with a matching key found at a the index in the hashtable determined by the
@@ -121,6 +126,7 @@ class Hashtable:
                         return
         return None
 
+    '''O(1)'''
     def get_keys(self):
         """
         This function returns a list of all the keys in the hashtable.
@@ -136,6 +142,7 @@ class Hashtable:
         # return sorted(_list)
         return self.keys
 
+    '''O(1)'''
     def get_values(self):
         """
         This function returns a list of all the values in the hashtable.
@@ -151,6 +158,7 @@ class Hashtable:
         # return _list
         return self.values
 
+    '''O(n)'''
     def get_items(self):
         """
         This function returns all the items (key, value) pair tuples in the hashtable.
@@ -162,6 +170,7 @@ class Hashtable:
                 _list.append(i)
         return sorted(_list)
 
+    '''O(1)'''
     def get_size(self):
         """
         This function returns the size of the hashtable.

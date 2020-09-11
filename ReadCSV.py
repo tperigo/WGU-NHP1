@@ -10,10 +10,11 @@ import datetime
 from Hashtable import Hashtable
 from Package import Package
 
+'''O(1)'''
 # Assigns a variable for easy access to today's datetime
 t_date = datetime.datetime.today()
 
-
+'''O(n^2) - I think .replace() is o(m) ... so that in a for loop would make o(n*m)... '''
 def import_csv_package_file(filename):
     """
     Reads a CSV file of package data as input and parses the data into a HashTable of package objects.
@@ -38,6 +39,7 @@ def import_csv_package_file(filename):
         return h
 
 
+'''O(n^2)'''
 # Reads a CSV file as input and parses the data into a list
 def import_csv_distance_file(filename):
     """

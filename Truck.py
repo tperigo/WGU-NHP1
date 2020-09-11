@@ -15,6 +15,8 @@ class Truck:
     packages at once. These packages are placed in a list on_truck[]. Trucks move at a constant 18 MPH, and can keep
     track of their distance traveled in the variable_traveled.
     """
+
+    '''O(1)'''
     def __init__(self, truck_id, driver, start_time):
         """
         Initialize the Truck object with the given parameters. MAX_PACKAGES and AVG_MPH are constants and should not
@@ -32,6 +34,7 @@ class Truck:
         self.distance_traveled = 0.0
         self.track_time = start_time
 
+    '''O(1)'''
     def load_package(self, p):
         """
         This function loads a package onto the truck. It takes a Package object and if the number of packages in
@@ -46,6 +49,7 @@ class Truck:
         else:
             print("ERROR: Truck is full. Number of packages loaded: ", len(self.on_truck))
 
+    '''O(1)'''
     def deliver_package(self, p):
         """
         This function takes a package from the truck and delivers it to its destination. It takes a package object
@@ -57,6 +61,7 @@ class Truck:
         p.set_status('DELIVERED by ' + self.driver + ' at ' + self.track_time.strftime("%H:%M"))
         p.set_time_stamp(self.track_time)
 
+    '''O(1)'''
     def unload_package(self, p):
         """
         This function unloads a package from the truck and returns it to the HUB. It takes a package object and
@@ -67,6 +72,7 @@ class Truck:
         self.on_truck.remove(p)
         p.set_status('AT HUB')
 
+    '''O(1)'''
     def set_status(self, status):
         """
         This function sets the Trucks status to the given string.
@@ -74,6 +80,7 @@ class Truck:
         """
         self.status = status
 
+    '''O(1)'''
     def get_time(self):
         """
         This function returns the truck's track_time value.
@@ -81,6 +88,7 @@ class Truck:
         """
         return self.track_time
 
+    '''O(n)'''
     def travel(self, distance):
         """
         This function calculates the distance traveled by the truck and the time it took to travel that distance. It

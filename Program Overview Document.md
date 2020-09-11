@@ -1,8 +1,8 @@
 # Program Overview Document  
   
 ## A: Algorithm Selection  
-The core algorithm that this program uses to solve the scenario problem is the **nearest delivery neighbor graph traversal algorithm**.
-It is a heuristically greedy and self-adjusting algorithm
+The core algorithm that this program uses to solve the scenario problem is the **nearest delivery neighbor algorithm**
+for graph traversal.  It is a heuristically greedy and self-adjusting algorithm
 
 > The algorithm code and its helpers can be found in `Graph.py`. 
 
@@ -13,7 +13,8 @@ More information about the algorithm and how the algorithm functions can be foun
 
 First, to determine what packages to load onto a truck first, the **priority-first algorithm** looks at package deadline 
 data and places packages into a `priority_queue[]` list based on their deadline.
- ```
+
+```
 for each package in package_table
     if package has deadline
         add package to priority_queue
@@ -100,7 +101,18 @@ Concerning a communication protocol, the application code and data used are cont
 communication protocol or interaction semantics are needed.  
 
 ## B3: Space-Time Complexity and Big-O
-> See source code for comments for each code block's Big-O space-time complexity 
+> See source code for triple quote comments for each code block's Big-O complexity 
+
+Example: 
+```python
+'''O(n^2)'''
+def ready_route_data(g, locations):
+
+    for loc in locations:
+        for v in g.adjacency_list:
+            if loc == v.label:
+                v.has_delivery = True
+```
 
 ## B4: Adaptability
 The core algorithm discussed in section A is self-adjusting. Hence, it is able to be scaled with data as needed.
@@ -122,8 +134,9 @@ application increase, there may be issues. However a `truck.truck_id` and a `tru
 and can assist with automatic truck allocation in the future with some additional code. 
 
 ## B5: Software Efficiency and Maintainability
-Concerning overall efficiency,  &&&&&&&&&&&&&
-
+Concerning overall efficiency,  the application runs in ***polynomial time*** with an upper bound big-O complexity of
+simplified to O(n^2). Currently with a small dataset performance is good and should be noticeably slow until scaled several
+magnitudes. 
 
 Concerning overall maintainability, the application code is neatly formatted with each function definition properly documented, thoroughly explaining the function's abilities,
 what parameters are taken (if any), and what is returned (if something is returned). Inline comments are also included help to explain complex code further.
