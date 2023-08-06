@@ -1,4 +1,2 @@
-# NHP1
-C950 - WGUPS Project  
-
+# Python Data Structures and Algorithms II Nearest Neighbor Problem
 
